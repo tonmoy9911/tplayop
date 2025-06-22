@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/manifest", "destination": "/api/manifest.js" },
+    { "source": "/keys", "destination": "/api/keys.js" }
+  ]
+}
