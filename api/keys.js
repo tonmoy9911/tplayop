@@ -1,4 +1,8 @@
 export default async function handler(req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).send("Method Not Allowed");
+  }
+
   const { id } = req.query;
   if (!id) return res.status(400).send("Missing ID");
 
