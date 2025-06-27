@@ -10,32 +10,12 @@ export default async function handler(req, res) {
 
   const backendUrl = `https://tp.drmlive-01.workers.dev`;
 
-  // Helper to read raw body from req
-  async function getRawBody(req) {
-    return new Promise((resolve, reject) => {
-      let data = [];
-      req.on('data', chunk => data.push(chunk));
-      req.on('end', () => resolve(Buffer.concat(data)));
-      req.on('error', err => reject(err));
-    });
-  }
-
   try {
     let fetchOptions = { headers };
 
     if (req.method === "POST") {
       fetchOptions.method = "POST";
-
-      // Read the raw body from the incoming request
-      const rawBody = await getRawBody(req);
-
-      // Forward the raw body as is
-      fetchOptions.body = rawBody;
-
-      // Also forward Content-Type header if present in original request
-      if (req.headers['content-type']) {
-        fetchOptions.headers['Content-Type'] = req.headers['content-type'];
-      }
+      fetchOptions.body = req; // forward original POST body (adjust if req is not a stream)
     } else if (req.method === "GET") {
       // Convert GET to POST with id in body
       fetchOptions.method = "POST";
