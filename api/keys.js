@@ -5,27 +5,13 @@ export default async function handler(req, res) {
   const headers = {
     "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.69.69.69 YGX/537.36',
     "Origin": 'https://watch.tataplay.com',
-    "Referer": 'https://watch.tataplay.com',
+    "Referer": 'https://watch.tataplay.com'
   };
 
-  const backendUrl = `https://tp.drmlive-01.workers.dev`;
+  const backendUrl = `https://tp.drmlive-01.workers.dev?id=${id}`;
 
   try {
-    let fetchOptions = { headers };
-
-    if (req.method === "POST") {
-      fetchOptions.method = "POST";
-      fetchOptions.body = req; // forward original POST body (adjust if req is not a stream)
-    } else if (req.method === "GET") {
-      // Convert GET to POST with id in body
-      fetchOptions.method = "POST";
-      fetchOptions.headers["Content-Type"] = "application/x-www-form-urlencoded";
-      fetchOptions.body = `id=${encodeURIComponent(id)}`;
-    } else {
-      return res.status(405).send("Method Not Allowed");
-    }
-
-    const response = await fetch(backendUrl, fetchOptions);
+    const response = await fetch(backendUrl, { headers });
 
     if (!response.ok) {
       return res.status(response.status).send(`Upstream error: ${response.statusText}`);
