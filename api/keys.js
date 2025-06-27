@@ -1,9 +1,10 @@
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
+  // Handle the case for invalid methods
+  if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).send("Method Not Allowed");
   }
 
-  const { id } = req.query;
+  const { id } = req.query || req.body; // Check for id in either query (GET) or body (POST)
   if (!id) return res.status(400).send("Missing ID");
 
   const headers = {
